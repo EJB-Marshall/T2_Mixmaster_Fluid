@@ -360,15 +360,15 @@ module T2_fluid_mod
         nu_norm = nu1**(2.0_dp) + nu2**(2.0_dp)  + nu3**(2.0_dp)
         Gamma2 = 1.0_dp/(1.0_dp - nu_norm)
         T_00 = exp(tau_log)
-        T_01 = (K+1)/(1.0_dp+K*nu_norm)*T_00*nu1
-        T_02 = (K+1)/(1.0_dp+K*nu_norm)*T_00*nu2
-        T_03 = (K+1)/(1.0_dp+K*nu_norm)*T_00*nu3
-        T_11 = (K+1)/(1.0_dp+K*nu_norm)*T_00*nu1*nu1 + K*T_00/(Gamma2*(1.0_dp+K*nu_norm))
-        T_12 = (K+1)/(1.0_dp+K*nu_norm)*T_00*nu1*nu2 
-        T_13 = (K+1)/(1.0_dp+K*nu_norm)*T_00*nu1*nu3 
-        T_22 = (K+1)/(1.0_dp+K*nu_norm)*T_00*nu2*nu2 + K*T_00/(Gamma2*(1.0_dp+K*nu_norm))
-        T_23 = (K+1)/(1.0_dp+K*nu_norm)*T_00*nu2*nu3 
-        T_33 = (K+1)/(1.0_dp+K*nu_norm)*T_00*nu3*nu3 + K*T_00/(Gamma2*(1.0_dp+K*nu_norm))
+        T_01 = (K+1.0_dp)/(1.0_dp+K*nu_norm)*T_00*nu1
+        T_02 = (K+1.0_dp)/(1.0_dp+K*nu_norm)*T_00*nu2
+        T_03 = (K+1.0_dp)/(1.0_dp+K*nu_norm)*T_00*nu3
+        T_11 = (K+1.0_dp)/(1.0_dp+K*nu_norm)*T_00*nu1*nu1 + K*T_00/(Gamma2*(1.0_dp+K*nu_norm))
+        T_12 = (K+1.0_dp)/(1.0_dp+K*nu_norm)*T_00*nu1*nu2 
+        T_13 = (K+1.0_dp)/(1.0_dp+K*nu_norm)*T_00*nu1*nu3 
+        T_22 = (K+1.0_dp)/(1.0_dp+K*nu_norm)*T_00*nu2*nu2 + K*T_00/(Gamma2*(1.0_dp+K*nu_norm))
+        T_23 = (K+1.0_dp)/(1.0_dp+K*nu_norm)*T_00*nu2*nu3 
+        T_33 = (K+1.0_dp)/(1.0_dp+K*nu_norm)*T_00*nu3*nu3 + K*T_00/(Gamma2*(1.0_dp+K*nu_norm))
 
         ! Sigma_Plus = 0.5_dp*(1.0_dp - Sigma_Times**(2.0_dp) - Sigma_Minus**(2.0_dp) - Sigma2**(2.0_dp) - Sigma3**(2.0_dp) &
         !             - N_Minus**(2.0_dp) - N_Times**(2.0_dp) - T_00 - LambdaTilde)
