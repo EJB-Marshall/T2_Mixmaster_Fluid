@@ -6,9 +6,9 @@ This script creates a namelist file with the simulation parameters and takes the
 
 N - The number of grid cells<br/>
 K - The sound speed parameter<br/>
-f - The name of the file to be saved (NB: Need to include the .hdf5 extension in this argument! e.g. -f results.hdf5 will save an hdf5 file called results)
+f - The name of the file to be saved (Need to include the .hdf5 extension in this argument! e.g. -f results.hdf5 will save an hdf5 file called results.  The file path in hdf_io_mod.f90 for saved HDF5 files will also need to be modified for your system.)
 
-Note, the file path in hdf_io_mod.f90 for saved HDF5 files will need to be modified for your system. 
+
 
 Other simulation parameters, e.g. simulation length, can be modified inside the python file.
 
