@@ -271,7 +271,7 @@ module time_stepping_mod
             end if
         end do
 
-        print *, maxval(sqrt(y1(1:Nx,10)**(2.0_dp) + y1(1:Nx,11)**(2.0_dp)  + y1(1:Nx,12)**(2.0_dp)))
+        ! print *, maxval(sqrt(y1(1:Nx,10)**(2.0_dp) + y1(1:Nx,11)**(2.0_dp)  + y1(1:Nx,12)**(2.0_dp)))
 
         y0 = y1
 

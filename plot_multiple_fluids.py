@@ -244,21 +244,20 @@ grid_list = []
 convergence_list = []
 norm_list = []
 test_list = []
-Output_1 = h5py.File('/Users/elliotmarshall/Desktop/T2_Fluid_Fortran/T2_Primitive_Vars/HDF_Files/500_K05_Convergence2.hdf5', 'r')
-t_original = Output_1['Time'][:]
+# Output_1 = h5py.File('/Users/elliotmarshall/Desktop/T2_Fluid_Fortran/T2_Primitive_Vars/HDF_Files/500_K05_Convergence2.hdf5', 'r')
+# t_original = Output_1['Time'][:]
 
+markers = ['dotted','dashed','dashdot']
 
-# file_names = ['200_FutureFluid.hdf5','400_FutureFluid.hdf5','800_FutureFluid.hdf5','1600_FutureFluid.hdf5','3200_FutureFluid.hdf5']#,'6400_FutureFluid.hdf5']
-# file_names = ['400_FutureFluid.hdf5','800_FutureFluid.hdf5','1600_FutureFluid.hdf5','3200_FutureFluid.hdf5']
-# file_names = ['200_Exact_OT.hdf5','400_Exact_OT.hdf5','800_Exact_OT.hdf5','1600_Exact_OT.hdf5','3200_Exact_OT.hdf5','6400_Exact_OT.hdf5']
-# file_names = ['400_K05_Convergence.hdf5','800_K05_Convergence.hdf5','1600_K05_Convergence.hdf5','3200_K05_Convergence.hdf5']
-file_names = ['500_K05_Convergence2.hdf5','1000_K05_Convergence2.hdf5','2000_K05_Convergence2.hdf5','4000_K05_Convergence2.hdf5']
+file_names = ['500_K01.hdf5','500_K05.hdf5','500_K09.hdf5']
 
 for k in range(len(file_names)):
     Output_1 = h5py.File('/Users/elliotmarshall/Desktop/T2_Fluid_Fortran/T2_Primitive_Vars/HDF_Files/'+file_names[k], 'r')
     t = Output_1['Time'][:]
     grid = Output_1['x_coordinates'][:]
     K = Output_1['K'][()]
+
+    print(k)
 
     # Load in solution data
     Sigma_Minus = Output_1['Gravitational/Sigma_Minus'][:]
@@ -278,7 +277,7 @@ for k in range(len(file_names)):
     dx = np.abs(grid[1]-grid[0])
 
     time = 3000
-    print(t_original[time])
+    # print(t_original[time])
 
     # print(Sigma2[0,:])
 
@@ -296,132 +295,21 @@ for k in range(len(file_names)):
     T_23 = (K+1)/(1+K*nu_norm)*T_00*nu2*nu3 
     T_33 = (K+1)/(1+K*nu_norm)*T_00*nu3*nu3 + K*T_00/(Gamma2*(1+K*nu_norm))
 
+    point = 291
 
-    soln = np.array([Sigma_Minus, Sigma_Times, N_Minus, N_Times, \
-    E11, Sigma2, Sigma3, LambdaTilde,\
-    T_00, T_01, T_02, T_03])
-
-    CM1,CM2,CBeta = constrainteval(soln,dx,t)        
-    converge_time = np.zeros_like(Sigma_Times[0,:])
-    # for j in range(np.shape(N_Times)[1]):
-    #     if k>0:
-    #         spl = CubicSpline(t,nu1[:,j])
-    #         converge_time[j] = spl(t_original[time])
-
-    for j in range(np.shape(N_Times)[1]):
-        if k>0:
-            spl = CubicSpline(np.flip(t),np.flip(Sigma_Minus[:,j]))
-            converge_time[j] = spl(t_original[time])
-
-
-
-
-    # totalH3 = computeH3norm(nu1,dx)**2 + computeH3norm(mu,dx)**2  
-    # totall2 = computel2norm(nu1,dx)**2 + computel2norm(mu,dx)**2 
-    # norm_ratio = totalH3/totall2
-
-    l2norm = computel2norm(CM1,dx)
-    # norm_spl = CubicSpline(t,norm_ratio)
-    t_list.append(t)
-    grid_list.append(grid)
-    test_list.append(Sigma_Minus)
-    convergence_list.append(converge_time)
-    norm_list.append(l2norm)
-
-
-
-
-### Compute restricted high resolution run
-avg_high_res = restrict_grid(convergence_list[3],3)
-
-
-
-
-plt.rcParams.update({"text.usetex": True,
+    plt.rcParams.update({"text.usetex": True,
     "font.family": "serif",
     "font.serif": "Computer Modern",
     "savefig.bbox": "tight",
     "savefig.format": "pdf"})
-plt.rc('font', size=16)
+    plt.rc('font', size=16)
+
+    plt.plot(t[:25000],np.sqrt(nu1[:25000,point]**2 + nu2[:25000,point]**2 + nu3[:25000,point]**2),label=r'$K =$ ' + str(K[0]),linestyle=markers[k])
 
 
-
-
-
-# plt.figure()
-# plt.plot(t_list[0],np.log2(norm_list[0]),label=r'$500$')
-# plt.plot(t_list[1],np.log2(norm_list[1]),label=r'$1000$')
-# plt.plot(t_list[2],np.log2(norm_list[2]),label=r'$2000$')
-# plt.plot(t_list[3],np.log2(norm_list[3]),label=r'$4000$')
-# # plt.plot(t_list[3],np.max(np.log(np.abs(E11)),axis=1),label='E11')
-# # plt.plot(t_list[3],np.max(tau_log,axis=1),label='T^00')
-# # plt.plot(t_list[4],np.log2(norm_list[4]),label=r'$3200$')
-# plt.xlabel(r'$t$')
-# plt.ylabel(r'$\log_{2}\|C\|_{2}$')
-# plt.legend()
-# # plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
-# plt.tight_layout()
-# # plt.yscale("log")
-# # plt.ylim([10**(-15),1])
-# # print(t_original[time])
-# plt.show()
-
-
-# plt.figure()
-# plt.plot(grid_list[0],np.log2(np.abs(test_list[0][time,:])),label='400')
-# plt.plot(grid_list[1],np.log2(np.abs(convergence_list[1][:])),label='800')
-# plt.plot(grid_list[2],np.log2(np.abs(convergence_list[2][:])),label='1600')
-# # plt.plot(grid_list[3],np.log2(np.abs(convergence_list[3][:])),label='1600')
-# # plt.plot(grid_list[4],np.log2(np.abs(convergence_list[4][:])),label='3200')
-# # plt.plot(grid_list[5],convergence_list[5][:],label='3200')
-# plt.xlabel(r'$x$')
-# plt.ylabel(r'$\log_{2}|\Delta|$')
-# plt.legend()
-# plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
-# plt.tight_layout()
-# plt.show()
-
-
-
-plt.figure(1)
-plt.plot(grid_list[0],np.log2(np.abs(test_list[0][time,:]-avg_high_res[-1][:])),label='500')
-plt.plot(grid_list[1],np.log2(np.abs(convergence_list[1][:]-avg_high_res[-2][:])),label='1000')
-plt.plot(grid_list[2],np.log2(np.abs(convergence_list[2][:]-avg_high_res[-3][:])),label='2000')
-# plt.plot(grid_list[3],np.log2(np.abs(convergence_list[3][:]-avg_high_res[-4][:])),label='1600')
-# plt.plot(grid_list[4],np.log2(np.abs(convergence_list[4][:]-avg_high_res[-5][:])),label='3200')
-# plt.plot(grid_list[0],np.log2(np.abs(test_list[0][time,:]-test_list[5][time*32,::32])),label='200')
-# plt.plot(grid_list[1],np.log2((np.abs(test_list[1][time*2,:]-test_list[5][time*32,::16]))),label='400')
-# plt.plot(grid_list[2],np.log2((np.abs(test_list[2][time*4,:]-test_list[5][time*32,::8]))),label='800')
-# plt.plot(grid_list[3],np.log2((np.abs(test_list[3][time*8,:]-test_list[5][time*32,::4]))),label='1600')
-# plt.plot(grid_list[4],np.log2((np.abs(test_list[4][time*16,:]-test_list[5][time*32,::2]))),label='3200')
-plt.xlabel(r'$x$')
-plt.ylabel(r'$\log_{2}|\Delta|$')
 plt.legend()
-plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
+plt.xlabel(r'$t$')
+plt.ylabel(r'$|\nu|$')
 plt.tight_layout()
-# print(t_original[time])
+plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
 plt.show()
-
-
-
-### Exact OT Solution Convergence Plot
-
-# plt.figure(2)
-# plt.plot(grid_list[0],np.log2(np.abs(test_list[0][time,:]-1/(np.sqrt(3))*np.exp(t_list[0][time])*np.sin(np.exp(2*t_list[0][time])-2*grid_list[0]))),label='200')
-# plt.plot(grid_list[1],np.log2(np.abs(convergence_list[1][:]-1/(np.sqrt(3))*np.exp(t_list[0][time])*np.sin(np.exp(2*t_list[0][time])-2*grid_list[1]))),label='400')
-# plt.plot(grid_list[2],np.log2(np.abs(convergence_list[2][:]-1/(np.sqrt(3))*np.exp(t_list[0][time])*np.sin(np.exp(2*t_list[0][time])-2*grid_list[2]))),label='800')
-# plt.plot(grid_list[3],np.log2(np.abs(convergence_list[3][:]-1/(np.sqrt(3))*np.exp(t_list[0][time])*np.sin(np.exp(2*t_list[0][time])-2*grid_list[3]))),label='1600')
-# plt.plot(grid_list[4],np.log2(np.abs(convergence_list[4][:]-1/(np.sqrt(3))*np.exp(t_list[0][time])*np.sin(np.exp(2*t_list[0][time])-2*grid_list[4]))),label='3200')
-# plt.plot(grid_list[5],np.log2(np.abs(convergence_list[5][:]-1/(np.sqrt(3))*np.exp(t_list[0][time])*np.sin(np.exp(2*t_list[0][time])-2*grid_list[5]))),label='6400')
-# # # plt.plot(grid_list[0],np.log2(np.abs(test_list[0][time,:]-test_list[5][time*32,::32])),label='200')
-# # # plt.plot(grid_list[1],np.log2((np.abs(test_list[1][time*2,:]-test_list[5][time*32,::16]))),label='400')
-# # # plt.plot(grid_list[2],np.log2((np.abs(test_list[2][time*4,:]-test_list[5][time*32,::8]))),label='800')
-# # # plt.plot(grid_list[3],np.log2((np.abs(test_list[3][time*8,:]-test_list[5][time*32,::4]))),label='1600')
-# # # plt.plot(grid_list[4],np.log2((np.abs(test_list[4][time*16,:]-test_list[5][time*32,::2]))),label='3200')
-# plt.xlabel(r'$x$')
-# plt.ylabel(r'$\log_{2}|\Delta|$')
-# plt.legend()
-# plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
-# plt.tight_layout()
-# print(t_original[time])
-# plt.show()

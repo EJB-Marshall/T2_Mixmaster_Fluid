@@ -51,7 +51,7 @@ def conserved_to_primitive(cons ,K):
         return np.array([nu1,nu2,nu3,mu])
 
 
-Output_1 = h5py.File('/Users/elliotmarshall/Desktop/T2_Fluid_Fortran/T2_Primitive_Vars/HDF_Files/1000_K05.hdf5', 'r')
+Output_1 = h5py.File('/Users/elliotmarshall/Desktop/T2_Fluid_Fortran/T2_Primitive_Vars/HDF_Files/500_K05.hdf5', 'r')
 
 t = Output_1['Time'][:]
 grid = Output_1['x_coordinates'][:]
@@ -103,6 +103,10 @@ mu_log = tau_log - np.log((K+1)*Gamma2-K)
 ### Define Hubble-Normalised Variables and Generalised (?) Kasner Exponents
 Sigma_Plus_H = Sigma_Plus/(1-Sigma_Plus)
 Sigma_Minus_H = Sigma_Minus/(1-Sigma_Plus)
+N_Minus_H = N_Minus/(1-Sigma_Plus)
+N_Times_H = N_Times/(1-Sigma_Plus)
+Sigma3_H = Sigma3/(1-Sigma_Plus)
+Sigma2_H = Sigma2/(1-Sigma_Plus)
 Sigma_H_1 = -2*Sigma_Plus_H
 Sigma_H_2 = Sigma_Plus_H + np.sqrt(3)*Sigma_Minus_H
 Sigma_H_3 =  Sigma_Plus_H - np.sqrt(3)*Sigma_Minus_H
@@ -111,54 +115,59 @@ p2 = 1/3*(1 + Sigma_Plus_H + np.sqrt(3)*Sigma_Minus_H)
 p3 = 1/3*(1 + Sigma_Plus_H - np.sqrt(3)*Sigma_Minus_H)
 
 
-# plt.rcParams.update({"text.usetex": True,
-#     "font.family": "serif",
-#     "font.serif": "Computer Modern",
-#     "savefig.bbox": "tight",
-#     "savefig.format": "pdf"})
-# plt.rc('font', size=16)
+plt.rcParams.update({"text.usetex": True,
+    "font.family": "serif",
+    "font.serif": "Computer Modern",
+    "savefig.bbox": "tight",
+    "savefig.format": "pdf"})
+plt.rc('font', size=16)
 
 
-# print(t[29000])
+# print(t[100])
 
-# plt.plot(grid,Dx(mu_log[29000,:],dx),label=r'$\frac{\partial_{x}\rho}{\rho}$')
-# plt.xlabel(r'$x$')
-# plt.ylabel(r'$\frac{\partial_{x}\rho}{\rho}$')
+# # plt.plot(grid,Dx(mu_log[29000,:],dx),label=r'$\frac{\partial_{x}\rho}{\rho}$')
+# plt.tight_layout()
+# plt.plot(t,np.max(tau_log,axis=1),label=r'$\log(|\tilde{T}^{00}|)$')
+# plt.plot(t,np.max(np.log(np.abs(Sigma2)),axis=1),label=r'$\log(|E^{1}_{1}|)$')
+# plt.xlabel(r'$t$')
+# # plt.ylabel(r'$\nu^{1}$')
+# plt.legend()
 # plt.show()
 
 
 
-for i in range(0,np.shape(t)[0],50):
+# for i in range(0,np.shape(t)[0],50):
 
-    # plt.plot(grid[500:],nu1[i,500:],label='nu1')
-    # plt.plot(grid[500:],np.flip(-nu1[i,:500]),label='nu1')
-    # plt.plot(grid,nu2[i,:],label='nu2')
-    # plt.plot(grid,nu3[i,:],label='nu3')
-    # plt.plot(grid,np.sqrt(nu1[i,:]**2 + nu2[i,:]**2 + nu3[i,:]**2),label='nu1')
-    # plt.plot(grid,Dx(tau_log[i,:],dx),label='log(T^00)')
-    plt.plot(grid,Dx(mu_log[i,:],dx),label='log(T^00)')
-    # plt.plot(grid, Sigma_Minus_H[i,:])
-    # plt.xlabel('x')
-    # plt.ylabel(r'$|\nu|$')
-    # plt.ylabel(r'Density Gradient')
-#     plt.plot(grid,Sigma_Minus[i,:])
-#     plt.legend()
-    # print(np.max(nu1[i,:]**2 + nu2[i,:]**2 + nu3[i,:]**2))
-    # if np.any(np.max(nu1[i,:]**2 + nu2[i,:]**2 + nu3[i,:]**2)>=1.0):
-    #     print("Unphysical velocity!")
-    #     print(np.max(nu1[i,:]**2 + nu2[i,:]**2 + nu3[i,:]**2))
+#     # plt.plot(grid,nu1[i,:],label='nu1')
+#     # plt.plot(grid[500:],nu1[i,500:],label='nu1')
+#     # plt.plot(grid[500:],np.flip(-nu1[i,:500]),label='nu1')
+#     # plt.plot(grid,nu2[i,:],label='nu2')
+#     # plt.plot(grid,nu3[i,:],label='nu3')
+#     plt.plot(grid,np.sqrt(nu1[i,:]**2 + nu2[i,:]**2 + nu3[i,:]**2),label='nu1')
+#     # plt.plot(grid,Dx(tau_log[i,:],dx),label='log(T^00)')
+#     # plt.plot(grid,Dx(mu_log[i,:],dx),label='log(T^00)')
+#     # plt.plot(grid, Sigma_Minus_H[i,:])
+#     # plt.xlabel('x')
+#     # plt.ylabel(r'$|\nu|$')
+#     # plt.ylabel(r'Density Gradient')
+# #     plt.plot(grid,Sigma_Minus[i,:])
+# #     plt.legend()
+#     # print(np.max(nu1[i,:]**2 + nu2[i,:]**2 + nu3[i,:]**2))
+#     # if np.any(np.max(nu1[i,:]**2 + nu2[i,:]**2 + nu3[i,:]**2)>=1.0):
+#     #     print("Unphysical velocity!")
+#     #     print(np.max(nu1[i,:]**2 + nu2[i,:]**2 + nu3[i,:]**2))
 
-    # plt.ylim([-1.1,1.1])
-    # plt.ylim([-0.1,1.1])
-    # plt.tight_layout()
-    plt.title(t[i])
-    plt.draw()
-    plt.pause(0.05)
-    plt.cla()
+#     # plt.ylim([-1.1,1.1])
+#     plt.ylim([-0.1,1.1])
+#     # plt.tight_layout()
+#     plt.title(t[i])
+#     plt.draw()
+#     plt.pause(0.05)
+#     plt.cla()
 
 
 
-point = 320
+point = 291
 # for i in range(0,np.shape(t)[0],100):
 
 #     plt.plot(t[:i],nu1[:i,point]**2 + nu2[:i,point]**2 + nu3[:i,point]**2,label='|nu|')
@@ -181,15 +190,15 @@ point = 320
 
 
 
-# fig, ax = plt.subplots(2,1)
+fig, ax = plt.subplots(2,1)
 
 
 
 
 ### Fluid Variables
-# plt.plot(t[:],np.sqrt(nu1[:,point+i]**2 + nu2[:,point+i]**2 + nu3[:,point+i]**2),label='|nu|')
+# plt.plot(t[:],np.sqrt(nu1[:,point]**2 + nu2[:,point]**2 + nu3[:point]**2),label=r'$|\nu|$')
 # ax[0].plot(t[:],1-np.sqrt(nu1[:,point]**2 + nu2[:,point]**2 + nu3[:,point]**2),label='1-|nu|')
-# ax[0].plot(t[:],np.abs(nu1[:,point]),label=r'$|\nu^{1}|$')
+ax[0].plot(t[:],np.abs(nu1[:,point]),label=r'$|\nu^{1}|$')
 # ax[0].plot(t[:],np.abs(nu2[:,point]),label=r'$|\nu^{2}|$')
 # ax[0].plot(t[:],np.abs(nu3[:,point]),label=r'$|\nu^{3}|$')
 # plt.plot(t[:],Sigma_Plus[:,point],label='Sigma_plus')
@@ -198,7 +207,7 @@ point = 320
 ### Kasner Exponents and Sums
 # plt.plot(t[:],np.minimum(p1[:,point],np.minimum(p2[:,point],p3[:,point])),label='p_max')
 # plt.plot(t[:],0*t[:] + K,label='K')
-# ax[1].plot(t[:],p1[:,point]-K,label=r'$P_{1}-K$',color='orange')
+ax[1].plot(t[:],p1[:,point]-K,label=r'$P_{1}-K$')
 # ax[1].plot(t[:],p2[:,point]-K,label=r'$P_{2}-K$')
 # ax[1].plot(t[:],p3[:,point]-K,label=r'$P_{3}-K$')
 # plt.plot(t[:],p1[:,point]+p2[:,point]+p3[:,point], label='p_sum')
@@ -223,16 +232,18 @@ point = 320
 # plt.plot(t[:],Sigma2[:,point],label='Sigma_2')
 # plt.plot(t[:],Sigma3[:,point],label='Sigma_3')
 
-# ax[0].set_yscale("log")
-# ax[0].set_ylim([10**(-300),10**()])
-# ax[0].set_yticks([10**0,10**(-20),10**(-40),10**(-60)], minor=False)
-# ax[0].legend()
-# ax[1].legend()
-# ax[0].legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
-# ax[1].legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
-# plt.legend()
-# plt.yscale('log')
-# plt.xlabel(r'$t$')
-# plt.ylabel(r'$|\nu|$')
-# plt.show()
+ax[0].set_yscale("log")
+# # ax[0].set_ylim([10**(-300),10**()])
+# # ax[0].set_yticks([10**0,10**(-40),10**(-80),10**(-120),10**(-160),10**(-200),10**(-240)], minor=False)
+# ax[0].set_yticks([10**0,10**(-54),10**(-118)], minor=False)
+ax[0].legend( prop={'size': 14})
+ax[1].legend( prop={'size': 14})
+ax[0].legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
+ax[1].legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
+# # plt.legend()
+# # plt.yscale('log')
+plt.xlabel(r'$t$')
+plt.ylabel(r'$|\nu|$')
+# # plt.tight_layout()
+plt.show()
 

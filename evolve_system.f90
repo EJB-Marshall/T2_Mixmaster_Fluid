@@ -220,7 +220,7 @@ program evolve_system
 
     ! CM1 = E11*FD_C4(Sigma3) - r*Sigma3 - sqrt(3.0_dp)*Sigma3*N_Times + sqrt(3.0_dp)*S2
 
-    ! CM2 = E11*FD_C4(Sigma2) - r*Sigma2 - sqrt(3.0_dp)*Sigma2*N_Times + sqrt(3.0_dp)*S3 + 2.0_dp*sqrt(3.0_dp)*Sigma3*N_Minus
+    ! CM2 = E11*FD_C4(Sigma2) - r*Sigma2 + sqrt(3.0_dp)*Sigma2*N_Times + sqrt(3.0_dp)*S3 + 2.0_dp*sqrt(3.0_dp)*Sigma3*N_Minus
 
     ! CBeta = E11*FD_C4(LambdaTilde) - 2*LambdaTilde*r
 
